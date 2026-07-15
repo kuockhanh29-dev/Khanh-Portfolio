@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Airline Revenue Optimization | Nguyen Quoc Khanh</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt=""><span>NQK<span class="dot">.</span></span></a>
+    <nav class="nav case-nav">
+      <a href="index.html#projects">← Back to Portfolio</a>
+      <a href="#problem">Problem</a>
+      <a href="#method">Method</a>
+      <a href="#results">Results</a>
+      <a href="#recommendations">Recommendations</a>
+    </nav>
+  </header>
+
+  <main class="case-page">
+    <section class="case-hero section">
+      <div>
+        <p class="eyebrow">STRATEGY & ANALYTICS CASE STUDY</p>
+        <h1>Airline Revenue<br><span>Optimization</span></h1>
+        <p class="lead">
+          A simulation-based revenue management project that balances low-fare volume
+          with seat protection for higher-value passengers.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#results">View Results</a>
+          <a class="btn ghost" href="downloads/airline_revenue_optimization_results.csv">Download Results</a>
+        </div>
+      </div>
+      <div class="case-summary-card">
+        <div><span>Aircraft capacity</span><b>180</b></div>
+        <div><span>Fare classes</span><b>3</b></div>
+        <div><span>Simulation runs</span><b>30,000</b></div>
+        <div><span>Revenue uplift</span><b>36.8%</b></div>
+      </div>
+    </section>
+
+    <section class="section case-section" id="problem">
+      <div class="section-label">01 / BUSINESS PROBLEM</div>
+      <div class="case-copy">
+        <h2>How many seats should the airline protect for higher-paying passengers?</h2>
+        <p>
+          Airlines face a recurring trade-off: selling too many discounted tickets improves early load factor
+          but may displace late-booking passengers who are willing to pay significantly higher fares.
+          The objective is to define booking limits that maximize expected revenue while controlling
+          empty-seat risk and denied high-value demand.
+        </p>
+        <div class="objective-grid">
+          <article><b>Maximize expected revenue</b><span>Protect capacity for higher-yield demand without creating excessive spoilage.</span></article>
+          <article><b>Quantify the trade-off</b><span>Compare a first-come-first-served baseline with an optimized policy.</span></article>
+          <article><b>Stress-test decisions</b><span>Use 30,000 Monte Carlo demand scenarios rather than a single deterministic forecast.</span></article>
+          <article><b>Translate analysis into action</b><span>Recommend booking controls and next-step commercial experiments.</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section case-section" id="data">
+      <div class="section-label">02 / INPUTS & ASSUMPTIONS</div>
+      <div class="case-copy">
+        <h2>Demand and fare structure</h2>
+        <div class="data-table-wrap">
+          <table class="case-table">
+            <thead><tr><th>Fare class</th><th>Fare</th><th>Mean demand</th><th>Demand volatility</th><th>Commercial role</th></tr></thead>
+            <tbody>
+              <tr><td>Economy Saver</td><td>$120</td><td>150</td><td>28</td><td>Volume driver</td></tr>
+              <tr><td>Economy Flex</td><td>$260</td><td>55</td><td>14</td><td>Mid-yield demand</td></tr>
+              <tr><td>Business</td><td>$620</td><td>22</td><td>8</td><td>High-value late demand</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="comparison-gallery">
+          <figure><img src="assets/projects/airline-revenue-optimization/demand_fare_tradeoff.png" alt="Demand fare trade-off"><figcaption>Higher fares are associated with lower but more valuable demand.</figcaption></figure>
+          <figure><img src="assets/projects/airline-revenue-optimization/policy_heatmap.png" alt="Revenue heatmap"><figcaption>Revenue varies materially across seat-protection policies.</figcaption></figure>
+        </div>
+        <div class="scope-note">
+          <strong>Transparency note:</strong> this is a synthetic benchmark designed to demonstrate the decision logic.
+          It does not represent confidential data from a real airline.
+        </div>
+      </div>
+    </section>
+
+    <section class="section case-section" id="method">
+      <div class="section-label">03 / METHOD</div>
+      <div class="case-copy">
+        <h2>Monte Carlo simulation and booking-limit optimization</h2>
+        <div class="method-flow">
+          <div><b>01</b><span>Model demand distributions</span></div><i>→</i>
+          <div><b>02</b><span>Simulate 30,000 flights</span></div><i>→</i>
+          <div><b>03</b><span>Test booking limits</span></div><i>→</i>
+          <div><b>04</b><span>Compare expected revenue</span></div><i>→</i>
+          <div><b>05</b><span>Select best policy</span></div>
+        </div>
+        <div class="method-cards">
+          <article><span>BASELINE</span><h3>First-Come-First-Served</h3><p>Discounted demand can fill the aircraft before higher-fare demand arrives.</p></article>
+          <article><span>OPTIMIZATION</span><h3>Booking Limits</h3><p>The model caps Saver sales and protects seats for Business demand.</p></article>
+          <article><span>RISK TEST</span><h3>Stochastic Demand</h3><p>Thousands of demand scenarios quantify revenue, spoilage and denied demand.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section case-section" id="results">
+      <div class="section-label">04 / RESULTS</div>
+      <div class="case-copy">
+        <h2>Optimized policy improves revenue while preserving capacity discipline</h2>
+        <div class="data-table-wrap">
+          <table class="case-table result-table">
+            <thead><tr><th>Metric</th><th>Baseline</th><th>Optimized</th><th>Change</th></tr></thead>
+            <tbody>
+              <tr class="best-row"><td>Expected revenue per flight</td><td>$27,648</td><td>$37,831</td><td>+36.8%</td></tr>
+              <tr><td>Load factor</td><td>91.1%</td><td>92.7%</td><td>+1.6 pp</td></tr>
+              <tr><td>Average empty seats</td><td>16.0</td><td>13.1</td><td>-2.9</td></tr>
+              <tr><td>Denied Business demand</td><td>6.1</td><td>1.0</td><td>-5.1</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="comparison-gallery">
+          <figure><img src="assets/projects/airline-revenue-optimization/revenue_comparison.png" alt="Revenue comparison"><figcaption>Expected revenue increases under the optimized policy.</figcaption></figure>
+          <figure><img src="assets/projects/airline-revenue-optimization/capacity_utilization.png" alt="Capacity utilization"><figcaption>Revenue improvement is achieved with a controlled utilization trade-off.</figcaption></figure>
+        </div>
+
+        <div class="results-analysis">
+          <article><h3>Best policy</h3><p>Cap Saver sales at <strong>94</strong> seats and protect <strong>24</strong> seats for Business demand.</p></article>
+          <article><h3>Revenue effect</h3><p>The policy generates approximately <strong>36.8%</strong> more expected revenue per flight than the baseline.</p></article>
+          <article><h3>Management implication</h3><p>Maximizing load factor alone can destroy value when higher-fare demand arrives later in the booking cycle.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section case-section" id="recommendations">
+      <div class="section-label">05 / RECOMMENDATIONS</div>
+      <div class="case-copy">
+        <h2>Recommended commercial actions</h2>
+        <div class="recommendation-grid">
+          <article><b>1. Pilot the booking limits</b><span>Test the policy on comparable routes and monitor revenue per available seat.</span></article>
+          <article><b>2. Refresh forecasts frequently</b><span>Re-estimate class-level demand by day-of-week, season and booking horizon.</span></article>
+          <article><b>3. Add dynamic pricing</b><span>Combine seat protection with fare adjustments as remaining capacity and demand signals change.</span></article>
+          <article><b>4. Segment by route</b><span>Business-heavy and leisure-heavy routes should not use the same protection levels.</span></article>
+          <article><b>5. Incorporate cancellations</b><span>Extend the model with no-show probabilities and controlled overbooking.</span></article>
+          <article><b>6. Measure business impact</b><span>Track RASK, yield, spill, spoilage and customer displacement during the pilot.</span></article>
+        </div>
+
+        <div class="conclusion-card">
+          <h3>Executive conclusion</h3>
+          <p>
+            The analysis demonstrates that a simple booking-control policy can outperform a volume-first approach.
+            The central strategic insight is that capacity should be allocated by expected marginal value, not merely by booking order.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>© 2026 Nguyen Quoc Khanh</span><span>Airline Revenue Optimization Case Study</span></footer>
+</body>
+</html>

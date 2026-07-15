@@ -1,0 +1,43 @@
+Loading data from data/synthetic_ratings.csv ...
+
+--- Basic stats (raw data) ---
+n_ratings: 3360
+n_users: 120
+n_products: 80
+rating_min: 1.0
+rating_max: 5.0
+rating_mean: 3.648
+sparsity_pct: 65.0
+
+Filtering to active users / popular products for tractable CF ...
+
+--- Basic stats (filtered data) ---
+n_ratings: 3360
+n_users: 120
+n_products: 80
+rating_min: 1.0
+rating_max: 5.0
+rating_mean: 3.648
+sparsity_pct: 65.0
+
+Generating EDA plots ...
+Plots saved to outputs_synthetic
+
+--- Model 1: Popularity baseline ---
+Top 10 overall recommendations: ['P069', 'P049', 'P027', 'P013', 'P044', 'P019', 'P033', 'P006', 'P018', 'P010']
+
+--- Model 2: Item-based Collaborative Filtering ---
+Sample recs for user U110: ['P078', 'P008', 'P048', 'P003', 'P060', 'P045', 'P073', 'P076', 'P069', 'P032']
+Item-based CF -> RMSE: 0.7769 | Precision@10: 0.1719
+
+--- Model 3: SVD Matrix Factorization ---
+Sample recs for user U110: ['P045', 'P078', 'P003', 'P069', 'P076', 'P035', 'P048', 'P021', 'P073', 'P026']
+SVD -> RMSE: 3.0783 | Precision@10: 0.1193
+
+--- Summary ---
+Model               RMSE      Precision@10   
+---------------------------------------------
+Item-based CF       0.7769    0.1719         
+SVD (MF)            3.0783    0.1193         
+
+Summary written to outputs_synthetic/results_summary.txt

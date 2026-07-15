@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Amazon Recommendation System case study by Nguyen Quoc Khanh.">
+  <title>Amazon Recommendation System | Nguyen Quoc Khanh</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="noise"></div>
+  <header class="topbar">
+    <a class="brand" href="index.html"><img src="assets/logo.svg" alt=""><span>NQK<span class="dot">.</span></span></a>
+    <nav class="nav case-nav">
+      <a href="index.html#projects">← Back to Portfolio</a>
+      <a href="#objective">Objective</a>
+      <a href="#method">Methodology</a>
+      <a href="#results">Results</a>
+      <a href="#recommendations">Recommendations</a>
+    </nav>
+  </header>
+
+  <main class="case-page">
+    <section class="case-hero section">
+      <div>
+        <p class="eyebrow">MACHINE LEARNING CASE STUDY</p>
+        <h1>Amazon Product<br><span>Recommendation System</span></h1>
+        <p class="lead">
+          Built and evaluated a product recommendation system using user–product interactions, from exploratory analysis to model comparison and improvement recommendations.
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#results">View Results</a>
+          <a class="btn ghost" href="downloads/amazon_recommendation_system_source.zip" download>Download Source Code</a>
+        </div>
+      </div>
+      <div class="case-summary-card">
+        <div><span>Ratings</span><b>3,360</b></div>
+        <div><span>Users</span><b>120</b></div>
+        <div><span>Products</span><b>80</b></div>
+        <div><span>Sparsity</span><b>65%</b></div>
+      </div>
+    </section>
+
+    <section class="section case-section" id="objective">
+      <div class="section-label">01 / CONTEXT & OBJECTIVE</div>
+      <div class="case-copy">
+        <h2>Business Problem</h2>
+        <p>
+          Trên một nền tảng thương mại điện tử, người dùng phải lựa chọn giữa rất nhiều sản phẩm.
+          Nếu chỉ hiển thị các sản phẩm phổ biến, hệ thống không phản ánh sở thích riêng của từng
+          người dùng và dễ làm giảm khả năng khám phá sản phẩm. Vì vậy, dự án đặt mục tiêu xây dựng
+          một quy trình gợi ý có thể:
+        </p>
+        <div class="objective-grid">
+          <article><b>1. Cá nhân hóa</b><span>Đề xuất sản phẩm phù hợp dựa trên lịch sử rating của từng user.</span></article>
+          <article><b>2. So sánh mô hình</b><span>Đánh giá Item-based CF và SVD bằng RMSE và Precision@10.</span></article>
+          <article><b>3. Tái lập</b><span>Tổ chức pipeline có thể chạy lại từ dữ liệu đầu vào đến kết quả cuối cùng.</span></article>
+          <article><b>4. Chuyển thành insight</b><span>Diễn giải kết quả và đưa ra khuyến nghị cải thiện mô hình.</span></article>
+        </div>
+
+        <div class="scope-note">
+          <strong>Phạm vi kiểm thử:</strong> gói source không chứa file Amazon Electronics gốc từ Kaggle,
+          vì vậy pipeline được chạy trên một bộ dữ liệu tổng hợp có cấu trúc user–product tương tự để
+          kiểm tra khả năng vận hành. Các kết quả dưới đây là benchmark kỹ thuật, không được trình bày
+          như kết quả chính thức trên dữ liệu Amazon thật.
+        </div>
+      </div>
+    </section>
+
+    <section class="section case-section" id="data">
+      <div class="section-label">02 / DATA & EDA</div>
+      <div class="case-copy">
+        <h2>Benchmark Dataset</h2>
+        <div class="data-table-wrap">
+          <table class="case-table">
+            <thead><tr><th>Chỉ tiêu</th><th>Giá trị</th><th>Ý nghĩa</th></tr></thead>
+            <tbody>
+              <tr><td>Số rating</td><td>3.360</td><td>Tổng số tương tác user–product</td></tr>
+              <tr><td>Số user</td><td>120</td><td>Số người dùng duy nhất</td></tr>
+              <tr><td>Số product</td><td>80</td><td>Số sản phẩm duy nhất</td></tr>
+              <tr><td>Rating trung bình</td><td>3,648/5</td><td>Mức đánh giá chung khá tích cực</td></tr>
+              <tr><td>Khoảng rating</td><td>1–5</td><td>Thang đo phản hồi tiêu chuẩn</td></tr>
+              <tr><td>Sparsity</td><td>65%</td><td>65% ô trong ma trận user–item không có rating</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="amazon-gallery detailed-gallery">
+          <figure><img src="assets/projects/amazon-recsys/rating_distribution.png" alt="Phân bố rating"><figcaption>Phân bố rating: kiểm tra mức độ lệch và xu hướng đánh giá.</figcaption></figure>
+          <figure><img src="assets/projects/amazon-recsys/ratings_per_user.png" alt="Rating theo user"><figcaption>Ratings per user: đánh giá mức độ hoạt động của người dùng.</figcaption></figure>
+          <figure><img src="assets/projects/amazon-recsys/ratings_per_product.png" alt="Rating theo product"><figcaption>Ratings per product: quan sát hiện tượng long-tail.</figcaption></figure>
+        </div>
+
+        <div class="insight-box">
+          <h3>Nhận định EDA</h3>
+          <p>
+            Dữ liệu recommendation thường có độ thưa cao vì mỗi user chỉ tương tác với một phần nhỏ
+            danh mục sản phẩm. Điều này làm giảm số lượng cặp user–item có thể dùng để tính similarity
+            hoặc học latent factors. Pipeline vì vậy sử dụng ngưỡng lọc user hoạt động và sản phẩm phổ biến
+            để giảm nhiễu trước khi huấn luyện mô hình.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section case-section" id="method">
+      <div class="section-label">03 / METHODOLOGY</div>
+      <div class="case-copy">
+        <h2>Analytical and Modeling Workflow</h2>
+        <div class="method-flow">
+          <div><b>01</b><span>Load & clean data</span></div>
+          <i>→</i><div><b>02</b><span>EDA & sparsity</span></div>
+          <i>→</i><div><b>03</b><span>Filter interactions</span></div>
+          <i>→</i><div><b>04</b><span>Train/test split</span></div>
+          <i>→</i><div><b>05</b><span>Train models</span></div>
+          <i>→</i><div><b>06</b><span>Evaluate</span></div>
+        </div>
+
+        <div class="method-cards">
+          <article>
+            <span>BASELINE</span>
+            <h3>Popularity Recommender</h3>
+            <p>
+              Xếp hạng sản phẩm bằng điểm trung bình có trọng số, cân bằng giữa rating trung bình và số lượt rating.
+              Mô hình không cá nhân hóa nhưng hữu ích cho user mới hoặc khi chưa có đủ lịch sử tương tác.
+            </p>
+          </article>
+          <article>
+            <span>MODEL 1</span>
+            <h3>Item-based Collaborative Filtering</h3>
+            <p>
+              Xây dựng ma trận user–item, tính cosine similarity giữa các sản phẩm và đề xuất các sản phẩm
+              tương tự những sản phẩm user đã đánh giá cao. Cấu hình sử dụng 20 sản phẩm lân cận.
+            </p>
+          </article>
+          <article>
+            <span>MODEL 2</span>
+            <h3>SVD Matrix Factorization</h3>
+            <p>
+              Phân rã ma trận rating thành các latent factors của user và product, sau đó tái tạo rating dự đoán
+              cho các cặp chưa quan sát. Cấu hình benchmark sử dụng 20 factors.
+            </p>
+          </article>
+        </div>
+
+        <div class="metric-grid">
+          <article><b>RMSE</b><span>Đo sai số giữa rating dự đoán và rating thực tế. Giá trị càng thấp càng tốt.</span></article>
+          <article><b>Precision@10</b><span>Tỷ lệ sản phẩm liên quan xuất hiện trong top 10 đề xuất. Giá trị càng cao càng tốt.</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section case-section" id="results">
+      <div class="section-label">04 / RESULTS</div>
+      <div class="case-copy">
+        <h2>Model Comparison</h2>
+        <div class="data-table-wrap">
+          <table class="case-table result-table">
+            <thead>
+              <tr><th>Mô hình</th><th>RMSE</th><th>Precision@10</th><th>Đánh giá</th></tr>
+            </thead>
+            <tbody>
+              <tr class="best-row"><td>Item-based CF</td><td>0,7769</td><td>0,1719</td><td>Tốt nhất trong lần benchmark này</td></tr>
+              <tr><td>SVD Matrix Factorization</td><td>3,0783</td><td>0,1193</td><td>Cần tuning và rà soát bước demean</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="comparison-gallery">
+          <figure><img src="assets/projects/amazon-recsys/model_comparison_rmse.png" alt="So sánh RMSE"><figcaption>Item-based CF có sai số dự đoán thấp hơn rõ rệt.</figcaption></figure>
+          <figure><img src="assets/projects/amazon-recsys/model_comparison_precision.png" alt="So sánh Precision"><figcaption>Item-based CF cũng có chất lượng top-10 tốt hơn.</figcaption></figure>
+        </div>
+
+        <div class="results-analysis">
+          <article>
+            <h3>1. Item-based CF dẫn đầu</h3>
+            <p>
+              RMSE 0,7769 thấp hơn nhiều so với SVD và Precision@10 đạt 0,1719. Điều này cho thấy
+              cấu trúc similarity giữa sản phẩm phù hợp với bộ dữ liệu benchmark hiện tại hơn phương pháp
+              phân rã ma trận ở cấu hình mặc định.
+            </p>
+          </article>
+          <article>
+            <h3>2. SVD chưa được tối ưu</h3>
+            <p>
+              SVD đạt RMSE 3,0783, cho thấy dự đoán rating chưa ổn định. Nguyên nhân có thể đến từ số factors,
+              cách điền missing values bằng 0 trước khi demean, thiếu regularization và chưa tuning theo validation set.
+            </p>
+          </article>
+          <article>
+            <h3>3. Precision vẫn còn thấp</h3>
+            <p>
+              Precision@10 của mô hình tốt nhất là 17,19%, nghĩa là trung bình chưa đến 2 trong 10 sản phẩm đề xuất
+              trùng với các sản phẩm liên quan trong tập test. Hệ thống mới ở mức prototype, chưa phù hợp để triển khai sản xuất.
+            </p>
+          </article>
+        </div>
+
+        <div class="sample-recs">
+          <h3>Ví dụ recommendation cho user U110</h3>
+          <div class="rec-list">
+            <span>P078</span><span>P008</span><span>P048</span><span>P003</span><span>P060</span>
+            <span>P045</span><span>P073</span><span>P076</span><span>P069</span><span>P032</span>
+          </div>
+          <p>
+            Đây là top 10 sản phẩm được Item-based CF đề xuất dựa trên similarity với các sản phẩm mà user U110 đã rating.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section case-section" id="recommendations">
+      <div class="section-label">05 / RECOMMENDATIONS</div>
+      <div class="case-copy">
+        <h2>Improvement and Deployment Roadmap</h2>
+        <div class="recommendation-grid">
+          <article><b>1. Chạy trên dữ liệu Amazon gốc</b><span>Tải bộ Electronics ratings, ghi nhận quy mô, sparsity và kết quả thật thay cho benchmark tổng hợp.</span></article>
+          <article><b>2. Tuning mô hình SVD</b><span>Thử nhiều số factors, regularization, learning rate hoặc chuyển sang Surprise/implicit ALS.</span></article>
+          <article><b>3. Dùng split theo thời gian</b><span>Đánh giá theo chronological holdout để mô phỏng đúng tình huống dự đoán tương tác tương lai.</span></article>
+          <article><b>4. Bổ sung Recall@K và NDCG@K</b><span>Precision@10 chưa phản ánh đầy đủ khả năng tìm đủ sản phẩm liên quan và chất lượng thứ hạng.</span></article>
+          <article><b>5. Xử lý cold start</b><span>Kết hợp popularity, metadata sản phẩm, category và content-based features cho user hoặc product mới.</span></article>
+          <article><b>6. Xây dựng hybrid recommender</b><span>Kết hợp Item-CF, SVD và thông tin nội dung để tăng độ chính xác và tính đa dạng của recommendation.</span></article>
+          <article><b>7. Tối ưu khả năng mở rộng</b><span>Dùng sparse matrix thực sự, approximate nearest neighbors và batch precomputation cho catalog lớn.</span></article>
+          <article><b>8. Đánh giá business metrics</b><span>Khi triển khai, theo dõi CTR, conversion rate, revenue per session và coverage thay vì chỉ dùng metric offline.</span></article>
+        </div>
+
+        <div class="conclusion-card">
+          <h3>Conclusion</h3>
+          <p>
+            Dự án đã xây dựng thành công pipeline recommendation từ EDA, preprocessing, mô hình hóa đến đánh giá.
+            Trong benchmark hiện tại, Item-based CF là lựa chọn phù hợp nhất. Tuy nhiên, kết quả vẫn mang tính thử nghiệm;
+            bước quan trọng tiếp theo là chạy trên dữ liệu Amazon thật, cải thiện quy trình validation và xây dựng hybrid model
+            trước khi xem xét triển khai ở quy mô thực tế.
+          </p>
+        </div>
+
+        <div class="project-actions">
+          <a class="btn primary" href="downloads/amazon_synthetic_benchmark_results.txt" target="_blank">Open Raw Results</a>
+          <a class="btn ghost" href="downloads/amazon_synthetic_benchmark_run_log.txt" target="_blank">Open Run Log</a>
+          <a class="btn ghost" href="downloads/amazon_recommendation_system_source.zip" download>Download Source Code</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>© 2026 Nguyen Quoc Khanh</span><span>Amazon Recommendation System — Case Study</span></footer>
+</body>
+</html>
